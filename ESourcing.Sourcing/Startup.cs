@@ -1,5 +1,7 @@
 using ESourcing.Sourcing.Data;
 using ESourcing.Sourcing.Data.Interfaces;
+using ESourcing.Sourcing.Repositories;
+using ESourcing.Sourcing.Repositories.Interfaces;
 using ESourcing.Sourcing.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,11 +35,14 @@ namespace ESourcing.Sourcing
             services.AddControllers();
 
             services.Configure<SourcingDatabaseSettings>(Configuration.GetSection(nameof(SourcingDatabaseSettings)));
+            //Configure un GetSection methodu ile git appsettings.json dan nameof yani adý SourcingDatabaseSettings olan sectionunu al diyoruz.
 
             services.AddSingleton<ISourcingDatabaseSettings>(sp=>sp.GetRequiredService<IOptions<SourcingDatabaseSettings>>().Value);
             //ISourcingDatabaseSettings istediðim zaman service provider ile git appsettings.jsondaki SourcingDatabaseSettings classdaki deðerlere karsýlýk gelen deðerlerle bi obje olustur diyoruz. ConnectionString mesela
 
             services.AddTransient<ISourcingContext, SourcingContext>();
+
+            services.AddTransient<IAuctionRepository, AuctionRepository>();
 
             services.AddSwaggerGen(c =>
             {
