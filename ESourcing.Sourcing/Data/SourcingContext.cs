@@ -10,7 +10,7 @@ namespace ESourcing.Sourcing.Data
         public SourcingContext(ISourcingDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.ConnectionString);
+            var database = client.GetDatabase(settings.DatabaseName);
 
             Auctions = database.GetCollection<Auction>(nameof(Auction));
             Bids = database.GetCollection<Bid>(nameof(Bid));
