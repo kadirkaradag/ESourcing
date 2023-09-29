@@ -3,13 +3,17 @@ using ESourcing.Sourcing.Data.Interfaces;
 using ESourcing.Sourcing.Repositories;
 using ESourcing.Sourcing.Repositories.Interfaces;
 using ESourcing.Sourcing.Settings;
+using EventBusRabbitMQ;
+using EventBusRabbitMQ.Producer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using RabbitMQ.Client;
 
 namespace ESourcing.Sourcing
 {
@@ -28,11 +32,17 @@ namespace ESourcing.Sourcing
 
             services.AddControllers();
 
+            #region Database Connection Dependencies
+
             services.Configure<SourcingDatabaseSettings>(Configuration.GetSection(nameof(SourcingDatabaseSettings)));
             //Configure un GetSection methodu ile git appsettings.json dan nameof yani adý SourcingDatabaseSettings olan sectionunu al diyoruz.
 
-            services.AddSingleton<ISourcingDatabaseSettings>(sp=>sp.GetRequiredService<IOptions<SourcingDatabaseSettings>>().Value);
+            services.AddSingleton<ISourcingDatabaseSettings>(sp => sp.GetRequiredService<IOptions<SourcingDatabaseSettings>>().Value);
             //ISourcingDatabaseSettings istediðim zaman service provider ile git appsettings.jsondaki SourcingDatabaseSettings classdaki deðerlere karsýlýk gelen deðerlerle bi obje olustur diyoruz. ConnectionString mesela
+
+            #endregion
+
+            #region Project Dependencies
 
             services.AddTransient<ISourcingContext, SourcingContext>();
 
@@ -40,10 +50,54 @@ namespace ESourcing.Sourcing
 
             services.AddTransient<IBidRepository, BidRepository>();
 
+            #endregion
+
+            #region Swagger Dependencies
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ESourcing.Sourcing", Version = "v1" });
             });
+
+            #endregion
+
+            #region EventBus
+
+            // IRabbitMQPersistentConnection caðýrdýðým zaman bana singleton olarak asagýda olusturdugum DefaultRabbitMQPersistentConnection vermesini istiyorum.
+            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory()
+                {
+                    HostName = Configuration["EventBus:HostName"]
+                };
+
+                if (!string.IsNullOrWhiteSpace(Configuration["EventBus:UserName"]))
+                {
+                    factory.UserName = Configuration["EventBus:UserName"];
+                }
+
+                if (!string.IsNullOrWhiteSpace(Configuration["EventBus:Password"]))
+                {
+                    factory.Password = Configuration["EventBus:Password"];
+                }
+
+                var retryCount = 5;
+
+                if (!string.IsNullOrWhiteSpace(Configuration["EventBus:RetryCount"]))
+                {
+                    retryCount = int.Parse(Configuration["EventBus:RetryCount"]);
+                }
+
+                return new DefaultRabbitMQPersistentConnection(factory, retryCount, logger);
+            });
+
+            services.AddSingleton<EventBusRabbitMQProducer>();
+
+            #endregion
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
