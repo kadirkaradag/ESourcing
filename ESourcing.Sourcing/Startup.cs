@@ -50,6 +50,8 @@ namespace ESourcing.Sourcing
 
             services.AddTransient<IBidRepository, BidRepository>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             #endregion
 
             #region Swagger Dependencies
