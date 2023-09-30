@@ -91,7 +91,7 @@ namespace ESourcing.Sourcing.Controllers
             return Ok(await _auctionRepository.Delete(id));
         }
 
-        [HttpPost("CompleteAuction", Name = "CompleteAuction")]
+        [HttpPost("CompleteAuction")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
@@ -140,6 +140,30 @@ namespace ESourcing.Sourcing.Controllers
             }
 
             return Accepted();
+
+        }
+
+        [HttpPost("TestEvent")]
+        public ActionResult<OrderCreateEvent> TestEvent()
+        {
+            OrderCreateEvent eventMessage = new OrderCreateEvent();
+            eventMessage.Quantity = 1;
+            eventMessage.AuctionId = "dummy1";
+            eventMessage.ProductId = "dummy_prod_1";
+            eventMessage.Price = 40;
+            eventMessage.SellerUserName = "testdum@test.com";             
+
+            try
+            {
+                _eventBus.Publish(EventBusConstants.OrderCreateQueue, eventMessage);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR Publishing integration event: {EventId} from {AppName}", eventMessage.Id, "Sourcing");
+                throw;
+            }
+
+            return Accepted(eventMessage);
 
         }
 
