@@ -1,7 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ordering.Domain.Repositories;
+using Ordering.Domain.Repositories.Base;
 using Ordering.Infrastructure.Data;
+using Ordering.Infrastructure.Repositories;
+using Ordering.Infrastructure.Repositories.Base;
 
 namespace Ordering.Infrastructure
 {
@@ -16,6 +20,9 @@ namespace Ordering.Infrastructure
             );
 
             //Add Repositories.
+
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>)); //typeof kullanmanın nedeni best practise olarak kendi içerisinde tip alan interfaceleri lifetime a eklerken type of ile ekliyoruz bu sekilde
+            services.AddTransient<IOrderRepository, OrderRepository>();
 
             return services;
         }
