@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Ordering.Application.Handlers
 {
-    public class OrderCreateHandler : IRequestHandler<OrderCreateCommand, OrderResponse>
+    public class OrderCreateHandler : IRequestHandler<OrderCreateCommand, OrderResponse> //mediatr.Send() methoduna a OrderCreateCommand tipinde model geldiğinde OrderCreateHandler calısır ve asagıdaki Handle işlemini uygular.
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
