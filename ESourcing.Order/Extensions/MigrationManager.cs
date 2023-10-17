@@ -21,7 +21,7 @@ namespace ESourcing.Order.Extensions
                         orderContext.Database.Migrate();  //codefirst yazdığımız icin yaptığımız değişiklikleri vs sql server a migrate edebilmemiz icin.
                     }
 
-                    OrderContextSeed.SeedAsync(orderContext).Wait(); //methodu senktonlaştırdık.
+                    OrderContextSeed.SeedAsync(orderContext).Wait(); //methodu senkronlaştırdık.
 
                 }
                 catch (Exception ex)

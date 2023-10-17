@@ -14,10 +14,15 @@ namespace Ordering.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             //inMemory geliştirirken bu kodları kullanıcaz. sql server a geçince de o kodları yazıcaz bunları comment e alıcaz.
-            services.AddDbContext<OrderContext>(opt => opt.UseInMemoryDatabase(databaseName: "InMemoryDb"),
-                ServiceLifetime.Singleton,
-                ServiceLifetime.Singleton
-            );
+            //services.AddDbContext<OrderContext>(opt => opt.UseInMemoryDatabase(databaseName: "InMemoryDb"),
+            //    ServiceLifetime.Singleton,
+            //    ServiceLifetime.Singleton
+            //);
+
+
+            // Sql server için injection
+            services.AddDbContext<OrderContext>(options => options.UseSqlServer(configuration.GetConnectionString("OrderConnection"),
+                b => b.MigrationsAssembly(typeof(OrderContext).Assembly.FullName)), ServiceLifetime.Singleton); //migration sebebi code first calısıp migrate edip sql üzerinde tablonun olusmasını sağlamak.
 
             //Add Repositories.
 
