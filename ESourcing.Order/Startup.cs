@@ -42,6 +42,9 @@ namespace ESourcing.Order
 
             #endregion
 
+            //Add AutoMapper
+            services.AddAutoMapper(typeof(Startup));
+
             #region EventBus
 
             // IRabbitMQPersistentConnection caðýrdýðým zaman bana singleton olarak asagýda olusturdugum DefaultRabbitMQPersistentConnection vermesini istiyorum.

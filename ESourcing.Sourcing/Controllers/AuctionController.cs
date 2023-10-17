@@ -151,7 +151,7 @@ namespace ESourcing.Sourcing.Controllers
             eventMessage.AuctionId = "dummy1";
             eventMessage.ProductId = "dummy_prod_1";
             eventMessage.Price = 40;
-            eventMessage.SellerUserName = "testdum@test.com";             
+            eventMessage.SellerUserName = "test@test.com";             
 
             try
             {
