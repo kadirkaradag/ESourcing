@@ -24,6 +24,9 @@ namespace ESourcing.UI.Controllers
         {
             return View(model);
         }
-
+        public IActionResult Detail()
+        {
+            return View();
+        }
     }
 }
