@@ -1,5 +1,6 @@
 using ESourcing.Core.Entities;
 using ESourcing.Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,11 +30,38 @@ namespace ESourcing.UI
         {
             services.AddDbContext<WebAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
-            services.AddIdentity<AppUser,IdentityRole>().AddDefaultTokenProviders().AddEntityFrameworkStores<WebAppContext>();
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+
+            }).AddDefaultTokenProviders().AddEntityFrameworkStores<WebAppContext>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddMvc();
             services.AddRazorPages();
+
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options =>
+            //    {
+            //        options.Cookie.Name = "My Cookie";
+            //        options.LoginPath = "Home/Login";
+            //        options.LogoutPath = "Home/Logout";
+            //        options.ExpireTimeSpan = TimeSpan.FromDays(3);
+            //        options.SlidingExpiration = false;
+            //    });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Home/Login";
+                options.LogoutPath = $"/Home/Logout";
+            });
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
