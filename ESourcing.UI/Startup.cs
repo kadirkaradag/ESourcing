@@ -3,16 +3,11 @@ using ESourcing.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ESourcing.UI
 {
@@ -54,11 +49,24 @@ namespace ESourcing.UI
             //        options.SlidingExpiration = false;
             //    });
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = $"/Home/Login";
-                options.LogoutPath = $"/Home/Logout";
-            });
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //}).AddCookie(options =>
+            //    {
+            //        options.LoginPath = "/Home/Login";
+            //        //options.AccessDeniedPath = "/Account/AccessDenied";
+            //        options.LogoutPath = $"/Home/Logout";
+
+            //    });
+
+            //services.ConfigureApplicationCookie(options =>
+            //{
+            //    options.LoginPath = $"/Home/Login";
+            //    options.LogoutPath = $"/Home/Logout";
+            //});
 
 
 
@@ -83,6 +91,7 @@ namespace ESourcing.UI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -36,7 +36,7 @@ namespace ESourcing.UI.Controllers
 
                 if (user != null)
                 {
-                    await _signInManager.SignOutAsync();  //cookie de bilgi varsa cıkıs yapılsın diye, signInManager giriş yapılmış kullanıcıların bilgilerinin tutuldugu yapı
+                    //await _signInManager.SignOutAsync();  //cookie de bilgi varsa cıkıs yapılsın diye, signInManager giriş yapılmış kullanıcıların bilgilerinin tutuldugu yapı
 
                     var result = await _signInManager.PasswordSignInAsync(user, loginModel.Password, isPersistent: false, lockoutOnFailure: false);
                     // isPersistent kullanıcıyı hatırlaması için , lockoutOnFailure hatalı girişlerde kilitleme için.
