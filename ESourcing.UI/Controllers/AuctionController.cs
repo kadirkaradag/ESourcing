@@ -1,13 +1,21 @@
-﻿using ESourcing.UI.ViewModel;
+﻿using ESourcing.Core.Repositories;
+using ESourcing.UI.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ESourcing.UI.Controllers
 {
-    //[Authorize]
     public class AuctionController : Controller
     {
+        private readonly IUserRepository _userRepository;
+
+        public AuctionController(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
         public IActionResult Index()
         {
             List<AuctionViewModel> model = new List<AuctionViewModel>();
@@ -15,8 +23,10 @@ namespace ESourcing.UI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var userList = await _userRepository.GetAllAsync();
+            ViewBag.UserList = userList;
             return View();
         }
         [HttpPost]

@@ -27,6 +27,7 @@ namespace ESourcing.UI.ViewModel
         public DateTime FinishedAt { get; set; }
         public DateTime CreatedTime { get; set; }
         public int Status { get; set; }
+        public int SellerId { get; set; }
         public List<string> IncludedSellers { get; set; }
     }
 }
