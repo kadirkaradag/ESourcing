@@ -1,6 +1,6 @@
 ﻿namespace ESourcing.Core.ResultModels
 {
-    public class Result<T> : IResult
+    public class Result<T> : IResult // generic bi result yapmamızın sebebi sadece uzak sunucudan gelen datayı değil isSuccess, message, total count gibi değerleri de dönebilmek.
     {
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
