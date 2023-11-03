@@ -4,6 +4,7 @@ using ESourcing.Core.Repositories.Base;
 using ESourcing.Infrastructure.Data;
 using ESourcing.Infrastructure.Repository;
 using ESourcing.Infrastructure.Repository.Base;
+using ESourcing.UI.Clients;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -77,7 +78,8 @@ namespace ESourcing.UI
                 options.LogoutPath = $"/Home/Logout";
             });
 
-
+            services.AddHttpClient();
+            services.AddHttpClient<ProductClient>();
 
         }
 
