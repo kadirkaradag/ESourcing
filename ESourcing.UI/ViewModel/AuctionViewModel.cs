@@ -6,7 +6,7 @@ namespace ESourcing.UI.ViewModel
 {
     public class AuctionViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required(ErrorMessage = "Please fill name")]
         public string Name { get; set; }
@@ -25,7 +25,7 @@ namespace ESourcing.UI.ViewModel
         [Required(ErrorMessage = "Please fill Finish Date")]
 
         public DateTime FinishedAt { get; set; }
-        public DateTime CreatedTime { get; set; }
+        public DateTime CreatedAt { get; set; }
         public int Status { get; set; }
         public int SellerId { get; set; }
         public List<string> IncludedSellers { get; set; }

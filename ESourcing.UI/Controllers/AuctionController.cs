@@ -3,6 +3,7 @@ using ESourcing.UI.Clients;
 using ESourcing.UI.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,17 +13,21 @@ namespace ESourcing.UI.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly ProductClient _productClient;
-
-        public AuctionController(IUserRepository userRepository, ProductClient productClient)
+        private readonly AuctionClient _auctionClient;
+        public AuctionController(IUserRepository userRepository, ProductClient productClient, AuctionClient auctionClient)
         {
             _userRepository = userRepository;
             _productClient = productClient;
+            _auctionClient = auctionClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<AuctionViewModel> model = new List<AuctionViewModel>();
-            return View(model);
+            var auctionList = await _auctionClient.GetAuction();
+
+            if(auctionList.IsSuccess)
+                return View(auctionList.Data);
+            return View();
         }
 
         [HttpGet]
@@ -39,8 +44,15 @@ namespace ESourcing.UI.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(AuctionViewModel model)
+        public async Task<IActionResult> Create(AuctionViewModel model)
         {
+            model.Status = 1;
+            model.CreatedAt = DateTime.Now;
+            var createAuction = await _auctionClient.CreateAuction(model);
+
+            if (createAuction.IsSuccess)
+                return RedirectToAction("Index");
+
             return View(model);
         }
         public IActionResult Detail()
