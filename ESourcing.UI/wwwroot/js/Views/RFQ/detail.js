@@ -1,4 +1,4 @@
-﻿var connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:8001/auctionHub").build();
+﻿var connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:17962/auctionHub").build();
 var auctionId = document.getElementById("AuctionId").value;
 
 //Disable send button until connection is established

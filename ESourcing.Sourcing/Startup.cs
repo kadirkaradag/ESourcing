@@ -99,6 +99,14 @@ namespace ESourcing.Sourcing
             services.AddSingleton<EventBusRabbitMQProducer>();
 
             #endregion
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+             {
+                 builder.AllowAnyOrigin()
+                 .AllowAnyMethod()
+                 .AllowAnyHeader()
+                 .AllowCredentials()
+                 .WithOrigins("https://localhost:44358");
+             }));
 
             services.AddSignalR();
 
@@ -118,6 +126,7 @@ namespace ESourcing.Sourcing
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
