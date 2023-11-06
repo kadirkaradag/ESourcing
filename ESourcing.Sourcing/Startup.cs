@@ -1,5 +1,6 @@
 using ESourcing.Sourcing.Data;
 using ESourcing.Sourcing.Data.Interfaces;
+using ESourcing.Sourcing.Hubs;
 using ESourcing.Sourcing.Repositories;
 using ESourcing.Sourcing.Repositories.Interfaces;
 using ESourcing.Sourcing.Settings;
@@ -99,6 +100,8 @@ namespace ESourcing.Sourcing
 
             #endregion
 
+            services.AddSignalR();
+
 
         }
 
@@ -118,6 +121,7 @@ namespace ESourcing.Sourcing
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<AuctionHub>("/auctionhub");
                 endpoints.MapControllers();
             });
         }
