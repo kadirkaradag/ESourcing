@@ -1376,4 +1376,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\js\Views\RFQ\" />
+  </ItemGroup>
+
 </Project>

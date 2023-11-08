@@ -21,9 +21,7 @@ connection.on("Bids", function (user, bid) {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    //var user = document.getElementById("userInput").value;
-
-    var user = document.getElementById("SellerUsername").value;
+    var user = document.getElementById("SellerUserName").value;
     var productId = document.getElementById("ProductId").value;
     var sellerUser = user;
     var bid = document.getElementById("exampleInputPrice").value;
@@ -57,14 +55,14 @@ function addBidToTable(user, bid) {
 function SendBid(model) {
 
     $.ajax({
-        url: "/RFQ/SendBid",
+        url: "/Auction/SendBid",
         type: "POST",
         data: model,
         success: function (response) {
             if (response.isSuccess) {
                 document.getElementById("exampleInputPrice").value = "";
 
-                connection.invoke("SendBid", groupName, model.SellerUserName, model.Price).catch(function (err) {
+                connection.invoke("SendBidAsync", groupName, model.SellerUserName, model.Price).catch(function (err) {
                     return console.error(err.toString());
                 });
             }

@@ -1,4 +1,5 @@
 ﻿using ESourcing.Core.Repositories;
+using ESourcing.Core.ResultModels;
 using ESourcing.UI.Clients;
 using ESourcing.UI.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -14,11 +15,14 @@ namespace ESourcing.UI.Controllers
         private readonly IUserRepository _userRepository;
         private readonly ProductClient _productClient;
         private readonly AuctionClient _auctionClient;
-        public AuctionController(IUserRepository userRepository, ProductClient productClient, AuctionClient auctionClient)
+        private readonly BidClient _bidClient;
+
+        public AuctionController(IUserRepository userRepository, ProductClient productClient, AuctionClient auctionClient, BidClient bidClient)
         {
             _userRepository = userRepository;
             _productClient = productClient;
             _auctionClient = auctionClient;
+            _bidClient = bidClient;
         }
 
         public async Task<IActionResult> Index()
@@ -55,9 +59,27 @@ namespace ESourcing.UI.Controllers
 
             return View(model);
         }
-        public IActionResult Detail()
+        public async Task<IActionResult> Detail(string id)
         {
-            return View();
+            AuctionBidsViewModel model = new AuctionBidsViewModel();
+
+            var auctionResponse = await _auctionClient.GetAuctionById(id);
+            var bidResponse = await _bidClient.GetAllBidsByAuctionId(id);
+
+            model.SellerUserName = HttpContext.User?.Identity.Name;
+            model.AuctionId = auctionResponse.Data.Id;
+            model.ProductId = auctionResponse.Data.ProductId;
+            model.Bids = bidResponse.Data;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<Result<string>> SendBid(BidViewModel model)
+        {
+            model.CreatedAt = DateTime.Now;
+            var sendBidResponse = await _bidClient.SendBid(model);
+            return sendBidResponse;
         }
     }
 }
