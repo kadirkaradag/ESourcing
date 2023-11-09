@@ -1,6 +1,7 @@
 ﻿using ESourcing.Core.Entities;
 using ESourcing.UI.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -42,6 +43,7 @@ namespace ESourcing.UI.Controllers
                     // isPersistent kullanıcıyı hatırlaması için , lockoutOnFailure hatalı girişlerde kilitleme için.
                     if (result.Succeeded)
                     {
+                        HttpContext.Session.SetString("IsAdmin",user.IsAdmin.ToString()); //session dan gelen user bilgisini alıyoruz
                         //return RedirectToAction("Index");
                         return LocalRedirect(returnUrl);
                     }

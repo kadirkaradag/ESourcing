@@ -22,6 +22,12 @@
                 <div class="card-footer">
                     <button type="submit" id="sendButton" class="btn btn-primary">Submit</button>
                 </div>
+                @if (Model.IsAdmin)
+                {
+                    <div class="card-footer">
+                        <button type="submit" id="finishButton" class="btn btn-primary">Finish RFQ</button>
+                    </div>
+                }
             </form>
         </div>
     </div>
@@ -40,11 +46,10 @@
                     <tr style="background-color:darkgray">
                         <th>Auction User Name</th>
                         <th>Price</th>
-@*                        <th>Quantity</th>
-*@                    </tr>
+                    </tr>
                 </thead>
                 <tbody class="bidLine">
-                    @if (Model.Bids.Any())
+                    @if (Model.Bids!=null)
                     {
                         @foreach (var bid in Model.Bids)
                         {

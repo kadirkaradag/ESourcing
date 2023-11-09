@@ -3,6 +3,7 @@ using ESourcing.Core.ResultModels;
 using ESourcing.UI.Clients;
 using ESourcing.UI.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -70,6 +71,8 @@ namespace ESourcing.UI.Controllers
             model.AuctionId = auctionResponse.Data.Id;
             model.ProductId = auctionResponse.Data.ProductId;
             model.Bids = bidResponse.Data;
+            var isAdmin = HttpContext.Session.GetString("IsAdmin");
+            model.IsAdmin = Convert.ToBoolean(isAdmin);
 
             return View(model);
         }
@@ -80,6 +83,14 @@ namespace ESourcing.UI.Controllers
             model.CreatedAt = DateTime.Now;
             var sendBidResponse = await _bidClient.SendBid(model);
             return sendBidResponse;
+        }
+
+
+        [HttpPost]
+        public async Task<Result<string>> CompleteAuction(string id)
+        {
+            var completeAuctionResponse = await _auctionClient.CompleteAuction(id);
+            return completeAuctionResponse;
         }
     }
 }

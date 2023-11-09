@@ -1,5 +1,5 @@
 ﻿var connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:17962/auctionHub").build();
-var auctionId = document.getElementById("AuctionId").value;
+var auctionId = document.getElementById("AuctionId").value; // Detail.cshtml icindeki hiddenFor aracılığı ile alıyoruz.
 
 //Disable send button until connection is established
 document.getElementById("sendButton").disabled = true;
@@ -21,8 +21,8 @@ connection.on("Bids", function (user, bid) {
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
-    var user = document.getElementById("SellerUserName").value;
-    var productId = document.getElementById("ProductId").value;
+    var user = document.getElementById("SellerUserName").value; // Detail.cshtml icindeki hiddenFor aracılığı ile alıyoruz.
+    var productId = document.getElementById("ProductId").value; // Detail.cshtml icindeki hiddenFor aracılığı ile alıyoruz.
     var sellerUser = user;
     var bid = document.getElementById("exampleInputPrice").value;
 
@@ -34,6 +34,12 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     }
 
     SendBid(sendBidRequest);
+
+    event.preventDefault();
+});
+
+document.getElementById("finishButton").addEventListener("click", function (event) {
+    SendCompleteAuction();
 
     event.preventDefault();
 });
@@ -66,6 +72,24 @@ function SendBid(model) {
                     return console.error(err.toString());
                 });
             }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
+    });
+
+}
+
+function SendCompleteAuction() {
+
+    var id = auctionId;
+    $.ajax({
+        url: "/Auction/CompleteAuction",
+        type: "POST",
+        data: {id:id},
+        success: function () {
+                console.log("İşleminiz Başarıyla Sonuçlandı");
+                window.location.href = '/Auction';            
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
