@@ -67,7 +67,7 @@
       ]
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Auction/CompleteAuction/{id}",
+      "DownstreamPathTemplate": "/api/v1/Auction/CompleteAuction/{id}", //buraya bakýcaz ?id= gibi bir þeye cevirmek gerekebilir.
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

@@ -18,12 +18,14 @@ namespace ESourcing.UI.Clients
         public AuctionClient(HttpClient client)
         {
             _client = client;
-            _client.BaseAddress = new Uri(CommonInfo.LocalAuctionBaseAddress);
+            _client.BaseAddress = new Uri(CommonInfo.BaseAddress);
         }
 
         public async Task<Result<List<AuctionViewModel>>> GetAuction()
         {
-            var response = await _client.GetAsync("/api/v1/auction");
+            //var response = await _client.GetAsync("/api/v1/auction");  //api gateway baglantısı olmadan.
+            var response = await _client.GetAsync("/Auction"); //api gateway ile. ocelot.json icindeki tanımlara göre.
+
             if (response.IsSuccessStatusCode)
             {
                 var responseData = await response.Content.ReadAsStringAsync();
@@ -45,7 +47,7 @@ namespace ESourcing.UI.Clients
             var dataAsString = JsonConvert.SerializeObject(model); // post ve get methodları icin biraz farklı işlemler yapılıyor. burası post yukarırdaki GetAuction get methoduna  vuruyor.
             var content = new StringContent(dataAsString);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await _client.PostAsync("/api/v1/auction", content);
+            var response = await _client.PostAsync("/Auction", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -61,7 +63,7 @@ namespace ESourcing.UI.Clients
 
         public async Task<Result<AuctionViewModel>> GetAuctionById(string id)
         {
-            var response = await _client.GetAsync("/api/v1/Auction/" + id);
+            var response = await _client.GetAsync("/Auction/" + id);
             if (response.IsSuccessStatusCode)
             {
                 var responseData = await response.Content.ReadAsStringAsync();
@@ -80,7 +82,7 @@ namespace ESourcing.UI.Clients
             var dataAsString = JsonConvert.SerializeObject(id);
             var content = new StringContent(dataAsString);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await _client.PostAsync("/api/v1/Auction/CompleteAuction?id="+id, content);
+            var response = await _client.PostAsync("/Auction/CompleteAuction?id="+id, content);
             if (response.IsSuccessStatusCode)
             {
                 var responseData = await response.Content.ReadAsStringAsync();
