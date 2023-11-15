@@ -82,7 +82,7 @@ namespace ESourcing.UI.Clients
             var dataAsString = JsonConvert.SerializeObject(id);
             var content = new StringContent(dataAsString);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await _client.PostAsync("/Auction/CompleteAuction?id="+id, content);
+            var response = await _client.PostAsync("/Auction/CompleteAuction/"+id, content);
             if (response.IsSuccessStatusCode)
             {
                 var responseData = await response.Content.ReadAsStringAsync();

@@ -73,7 +73,7 @@ namespace ESourcing.Sourcing.Controllers
         [ProducesResponseType(typeof(Auction), (int)HttpStatusCode.Created)]
         public async Task<ActionResult<Auction>> CreateAuction([FromBody] Auction auction)
         {
-            auction.Status = 0;
+            auction.Status = (int)Status.Active;
             await _auctionRepository.Create(auction);
             return CreatedAtRoute("GetAuction", new { id = auction.Id }, auction);
         }
@@ -92,7 +92,7 @@ namespace ESourcing.Sourcing.Controllers
             return Ok(await _auctionRepository.Delete(id));
         }
 
-        [HttpPost("CompleteAuction")]
+        [HttpPost("CompleteAuction/{id}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]

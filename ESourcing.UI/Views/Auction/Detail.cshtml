@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" id="sendButton" class="btn btn-primary">Submit</button>
+                    <button type="submit" id="sendButton" class="btn btn-primary" disabled={@if(Model.Status==1?true:false)}>Submit</button>
                 </div>
                 @if (Model.IsAdmin)
                 {

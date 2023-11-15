@@ -8,6 +8,7 @@ namespace ESourcing.UI.ViewModel
         public string ProductId { get; set; }
         public string SellerUserName { get; set; }
         public bool IsAdmin { get; set; }
+        public int Status { get; set; }
         public List<BidViewModel> Bids { get; set; }
     }
 }
